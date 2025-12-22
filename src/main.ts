@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import TitleScene from "./scenes/TitleScene";
 import GameScene from "./scenes/GameScene";
 
 const config: Phaser.Types.Core.GameConfig = {
@@ -9,7 +10,7 @@ const config: Phaser.Types.Core.GameConfig = {
     mode: Phaser.Scale.FIT,        // 画面にフィット
     autoCenter: Phaser.Scale.CENTER_BOTH, // 中央寄せ
     width: 800,
-      height: 600
+    height: 600
   },
 
   physics: {
@@ -20,7 +21,7 @@ const config: Phaser.Types.Core.GameConfig = {
     }
   },
 
-  scene: [GameScene]
+  scene: [TitleScene, GameScene]
 };
 
 
