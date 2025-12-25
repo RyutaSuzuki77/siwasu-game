@@ -23,6 +23,9 @@ export default class GameScene extends Phaser.Scene {
       this.load.image("sea", "assets/images/background/sea.png");
       this.load.image("sunrise", "assets/images/background/sunrise.png");
       this.load.image("snow", "assets/images/background/snow.png");
+      this.load.image("clean", "assets/images/object/clean.png");
+      this.load.image("work", "assets/images/object/work.png");
+      this.load.image("party", "assets/images/object/party.png");
       this.load.image("player_front", "assets/images/player/playerFront.png");
       this.load.spritesheet("player_run", "assets/images/player/playerRun.png", {
         frameWidth: 205,
@@ -153,6 +156,11 @@ export default class GameScene extends Phaser.Scene {
       const rand = (Math.floor(Math.random() * (this.maxRoundomX - this.minRandomX + 1)) + this.minRandomX);
 
       const obstacle = this.obstacles.create(rand, 0, type) as Phaser.Physics.Arcade.Sprite;
-      obstacle.setImmovable(true);
+
+      obstacle
+        .setOrigin(0.5, 1)
+        .setScale(0.8)
+        .setImmovable(true)
+        .setVelocityY(120);
     }
 }
