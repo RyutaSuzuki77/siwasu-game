@@ -1,9 +1,8 @@
 import Phaser from "phaser";
 
-export default class StartScene extends Phaser.Scene {
-  private startText!: Phaser.GameObjects.Text;
+export default class TitleScene extends Phaser.Scene {
   constructor() {
-    super("StartScene");
+    super("TitleScene");
   }
   preload() {
     this.load.image("title", "assets/images/background/title.png");
@@ -14,7 +13,7 @@ export default class StartScene extends Phaser.Scene {
     bg.setDisplaySize(500, 600);
 
     // スタート指示
-    this.startText = this.add.text(400, 300, "Press SPACE to Start", {
+    this.add.text(400, 300, "Press SPACE to Start", {
       fontSize: "32px",
       color: "#fcf9f9ff"
     }).setOrigin(0.5);

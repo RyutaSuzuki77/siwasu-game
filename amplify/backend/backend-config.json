@@ -1,0 +1,69 @@
+{
+  "api": {
+    "api35fc81f7": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "siwasugamec0fc0ae5"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
+  "function": {
+    "siwasugamec0fc0ae5": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributeEnvMap": {
+            "Arn": "TABLE_ARN",
+            "Name": "TABLE_NAME"
+          },
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "scores"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "hosting": {
+    "S3AndCloudFront": {
+      "providerPlugin": "awscloudformation",
+      "service": "S3AndCloudFront"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_siwasugamec0fc0ae5_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "siwasugamec0fc0ae5"
+        }
+      ]
+    },
+    "AMPLIFY_function_siwasugamec0fc0ae5_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "siwasugamec0fc0ae5"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "scores": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    }
+  }
+}

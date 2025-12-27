@@ -8,15 +8,14 @@ export default class GameScene extends Phaser.Scene {
     private scoreText!: Phaser.GameObjects.Text;
     private timerText!: Phaser.GameObjects.Text;
     private minRandomX = 0;
-    private maxRoundomX = 750;
-    private dayTime: number;
-    private day: number;
+    private maxRandomX = 750;
+    private dayCount = 0;
+    private day = 1;
+    private spawnDelay = 800;
     private sunrise!: Phaser.GameObjects.Image;
 
     constructor() {
-        super("GameScene");
-        this.dayTime = 0;
-        this.day = 1;
+      super("GameScene");
     }
 
     preload() {
@@ -26,15 +25,22 @@ export default class GameScene extends Phaser.Scene {
       this.load.image("clean", "assets/images/object/clean.png");
       this.load.image("work", "assets/images/object/work.png");
       this.load.image("party", "assets/images/object/party.png");
+      this.load.image("bomb", "assets/images/object/bomb.png");
       this.load.image("player_front", "assets/images/player/playerFront.png");
       this.load.spritesheet("player_run", "assets/images/player/playerRun.png", {
         frameWidth: 205,
         frameHeight: 280
       });
-      this.load.audio("game_bgm", "assets/bgm/gameBgm.mp3");
+      this.load.audio("game_bgm", "assets/sounds/bgm/gameBgm.mp3");
+      this.load.audio("get_item", "assets/sounds/effects/get.mp3");
+      this.load.audio("bomb", "assets/sounds/effects/bomb.mp3");
     }
 
     create() {
+      // 初期化
+      this.day = 1;
+      this.dayCount = 0;
+      this.score = 0;
       // BGM
       const bgm = this.sound.add("game_bgm", { loop: true, volume: 0.6 });
       bgm.play();
@@ -48,7 +54,7 @@ export default class GameScene extends Phaser.Scene {
       this.sunrise.setAlpha(0);
 
       // 雪のエフェクト
-      this.add.particles(0, 0, "snow", {
+      const snow = this.add.particles(0, 0, "snow", {
         x: { min: 0, max: 800 },
         y: 0,
         lifespan: 5000,
@@ -58,7 +64,7 @@ export default class GameScene extends Phaser.Scene {
       });
 
       // プレイヤー
-      this.player = this.physics.add.sprite(100, 400, "player_run")
+      this.player = this.physics.add.sprite(400, 800, "player_run")
         .setCollideWorldBounds(true)
         .setScale(0.5)
         .setOrigin(0.5, 1)
@@ -85,10 +91,10 @@ export default class GameScene extends Phaser.Scene {
         delay: 1000,
         loop: true,
         callback: () => {
-          this.dayTime++;
-          if (this.dayTime === 2) {
+          this.dayCount++;
+          if (this.dayCount === 2) {
             this.day++;
-            this.dayTime = 0;
+            this.dayCount = 0;
           }
 
           if (this.day === 32) {
@@ -97,8 +103,11 @@ export default class GameScene extends Phaser.Scene {
               alpha: 1,
               duration: 1000
             });
+            snow.setVisible(false);
+          }
+
+          if (this.day >= 32) {
             return;
-            // this.scene.restart();
           }
           this.timerText.setText(`Time: 12/${this.day}`);
         }
@@ -115,15 +124,36 @@ export default class GameScene extends Phaser.Scene {
 
       // 障害物生成ループ
       this.time.addEvent({
-        delay: 1200,
-        loop: true,
-          callback: () => this.spawnObstacle()
+        delay: this.spawnDelay,
+        callback: () => this.spawnObstacle(),
+        loop: false
       });
 
       // 当たり判定
-      this.physics.add.collider(this.player, this.obstacles, () => {
-        this.score += 1;
-        this.obstacles.clear(true, true);
+      this.physics.add.collider(this.player, this.obstacles, (_player, obstacle) => {
+        const sprite = obstacle as Phaser.Physics.Arcade.Sprite;
+        const key = sprite.texture.key;
+
+        switch (key) {
+          case "work":
+            this.score += 1;
+            this.sound.add("get_item", { loop: false, volume: 0.6 }).play();
+            break;
+          case "clean":
+            this.score += 2;
+            this.sound.add("get_item", { loop: false, volume: 0.6 }).play();
+            break;
+          case "party":
+            this.score += 3;
+            this.sound.add("get_item", { loop: false, volume: 0.6 }).play();
+            break;
+          case "bomb":
+            this.sound.add("bomb", { loop: false, volume: 1 }).play();
+            bgm.stop();
+            this.scene.start("GameOverScene", { score: this.score });
+            break;
+        }
+        obstacle.destroy();
         this.scoreText.setText(`Score: ${this.score}`);
       });
     }
@@ -134,14 +164,14 @@ export default class GameScene extends Phaser.Scene {
       if (this.cursors.right?.isDown && this.player.body!.blocked.down) {
         this.player.anims.play("player_run", true);
         this.player.setFlipX(false);
-        this.player.setVelocityX(300);
+        this.player.setVelocityX(500);
         return;
       }
       // 左移動
       if (this.cursors.left?.isDown && this.player.body!.blocked.down) {
         this.player.anims.play("player_run", true);
         this.player.setFlipX(true);
-        this.player.setVelocityX(-300);
+        this.player.setVelocityX(-500);
         return;
       }
 
@@ -151,9 +181,9 @@ export default class GameScene extends Phaser.Scene {
     }
 
     private spawnObstacle() {
-      const types = ["work", "clean", "party"];
+      const types = ["work", "clean", "party", "bomb"];
       const type = Phaser.Utils.Array.GetRandom(types);
-      const rand = (Math.floor(Math.random() * (this.maxRoundomX - this.minRandomX + 1)) + this.minRandomX);
+      const rand = (Math.floor(Math.random() * (this.maxRandomX - this.minRandomX + 1)) + this.minRandomX);
 
       const obstacle = this.obstacles.create(rand, 0, type) as Phaser.Physics.Arcade.Sprite;
 
@@ -161,6 +191,16 @@ export default class GameScene extends Phaser.Scene {
         .setOrigin(0.5, 1)
         .setScale(0.8)
         .setImmovable(true)
-        .setVelocityY(120);
+        .setVelocityY(50 * this.day)
+        .setSize(20, 20).setOffset(30, 30);
+
+      const nextDelay = Math.max(200, this.spawnDelay - this.day * 20);
+
+      this.time.addEvent({
+        delay: nextDelay,
+        callback: () => this.spawnObstacle(),
+        loop: false
+      });
+
     }
 }

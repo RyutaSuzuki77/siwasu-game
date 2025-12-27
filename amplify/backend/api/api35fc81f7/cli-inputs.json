@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/scores": {
+      "name": "/scores",
+      "lambdaFunction": "siwasugamec0fc0ae5",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

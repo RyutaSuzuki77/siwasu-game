@@ -1,0 +1,32 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-siwasugame-dev-5426a-authRole",
+      "UnauthRoleArn": "arn:aws:iam::390402555459:role/amplify-siwasugame-dev-5426a-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::390402555459:role/amplify-siwasugame-dev-5426a-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-siwasugame-dev-5426a-deployment",
+      "UnauthRoleName": "amplify-siwasugame-dev-5426a-unauthRole",
+      "StackName": "amplify-siwasugame-dev-5426a",
+      "StackId": "arn:aws:cloudformation:us-east-1:390402555459:stack/amplify-siwasugame-dev-5426a/74d44430-e312-11f0-960a-12ebecabb6c7",
+      "AmplifyAppId": "dqe4craq0cjku"
+    },
+    "categories": {
+      "function": {
+        "siwasugamec0fc0ae5": {
+          "deploymentBucketName": "amplify-siwasugame-dev-5426a-deployment",
+          "s3Key": "amplify-builds/siwasugamec0fc0ae5-3338787a6d553974706a-build.zip"
+        }
+      },
+      "storage": {
+        "scores": {}
+      },
+      "api": {
+        "api35fc81f7": {}
+      },
+      "hosting": {
+        "S3AndCloudFront": {}
+      }
+    }
+  }
+}
