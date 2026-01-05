@@ -3,7 +3,7 @@
   "paths": {
     "/scores": {
       "name": "/scores",
-      "lambdaFunction": "siwasugamec0fc0ae5",
+      "lambdaFunction": "siwasugame6d07846c",
       "permissions": {
         "setting": "open"
       }

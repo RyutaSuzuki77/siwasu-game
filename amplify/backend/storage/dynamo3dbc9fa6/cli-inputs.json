@@ -1,0 +1,14 @@
+{
+  "resourceName": "dynamo3dbc9fa6",
+  "tableName": "dynamo3dbc9fa6",
+  "partitionKey": {
+    "fieldName": "gameId",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "score_ts",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

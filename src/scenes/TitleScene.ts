@@ -22,5 +22,10 @@ export default class TitleScene extends Phaser.Scene {
     this.input.keyboard?.on("keydown-SPACE", () => {
       this.scene.start("GameScene");
     });
+    // スマホ対応
+    this.input.on('pointerdown', () => {
+      this.scene.start("GameScene");
+    });
+
   }
 }

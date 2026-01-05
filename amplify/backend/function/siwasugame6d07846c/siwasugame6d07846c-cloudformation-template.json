@@ -16,13 +16,13 @@
     "s3Key": {
       "Type": "String"
     },
-    "storagescoresName": {
+    "storagedynamo3dbc9fa6Name": {
       "Type": "String",
-      "Default": "storagescoresName"
+      "Default": "storagedynamo3dbc9fa6Name"
     },
-    "storagescoresArn": {
+    "storagedynamo3dbc9fa6Arn": {
       "Type": "String",
-      "Default": "storagescoresArn"
+      "Default": "storagedynamo3dbc9fa6Arn"
     }
   },
   "Conditions": {
@@ -55,12 +55,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "siwasugamec0fc0ae5",
+            "siwasugame6d07846c",
             {
               "Fn::Join": [
                 "",
                 [
-                  "siwasugamec0fc0ae5",
+                  "siwasugame6d07846c",
                   "-",
                   {
                     "Ref": "env"
@@ -97,12 +97,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "siwasugameLambdaRoled8fc9210",
+            "siwasugameLambdaRole66487383",
             {
               "Fn::Join": [
                 "",
                 [
-                  "siwasugameLambdaRoled8fc9210",
+                  "siwasugameLambdaRole66487383",
                   "-",
                   {
                     "Ref": "env"
@@ -182,14 +182,14 @@
               ],
               "Resource": [
                 {
-                  "Ref": "storagescoresArn"
+                  "Ref": "storagedynamo3dbc9fa6Arn"
                 },
                 {
                   "Fn::Join": [
                     "/",
                     [
                       {
-                        "Ref": "storagescoresArn"
+                        "Ref": "storagedynamo3dbc9fa6Arn"
                       },
                       "index/*"
                     ]

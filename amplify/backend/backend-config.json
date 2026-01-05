@@ -1,6 +1,6 @@
 {
   "api": {
-    "api35fc81f7": {
+    "api1a3a8d2e": {
       "dependsOn": [
         {
           "attributes": [
@@ -8,7 +8,7 @@
             "Arn"
           ],
           "category": "function",
-          "resourceName": "siwasugamec0fc0ae5"
+          "resourceName": "siwasugame6d07846c"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -16,7 +16,7 @@
     }
   },
   "function": {
-    "siwasugamec0fc0ae5": {
+    "siwasugame6d07846c": {
       "build": true,
       "dependsOn": [
         {
@@ -29,7 +29,7 @@
             "Arn"
           ],
           "category": "storage",
-          "resourceName": "scores"
+          "resourceName": "dynamo3dbc9fa6"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -43,25 +43,25 @@
     }
   },
   "parameters": {
-    "AMPLIFY_function_siwasugamec0fc0ae5_deploymentBucketName": {
+    "AMPLIFY_function_siwasugame6d07846c_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "siwasugamec0fc0ae5"
+          "resourceName": "siwasugame6d07846c"
         }
       ]
     },
-    "AMPLIFY_function_siwasugamec0fc0ae5_s3Key": {
+    "AMPLIFY_function_siwasugame6d07846c_s3Key": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "siwasugamec0fc0ae5"
+          "resourceName": "siwasugame6d07846c"
         }
       ]
     }
   },
   "storage": {
-    "scores": {
+    "dynamo3dbc9fa6": {
       "providerPlugin": "awscloudformation",
       "service": "DynamoDB"
     }

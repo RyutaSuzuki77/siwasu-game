@@ -22,32 +22,29 @@ export class GameOverScene extends Phaser.Scene {
     });
 
     // Id入力欄（Phaser 内）
-    this.add.text(100, 120, "Id:", { fontSize: "20px", color: "#fff" });
+    const input = document.getElementById("idInput") as HTMLInputElement;
 
     this.idText = this.add.text(180, 120, "Enter Id...", {
       fontSize: "20px",
-      color: "#888", // placeholder っぽい薄い色
+      color: "#888",
       backgroundColor: "#000",
       padding: { left: 4, right: 4, top: 2, bottom: 2 }
     });
 
-    // キーボード入力
-    let isPlaceholder = true;
+    // タップしたら input を表示
+    this.idText.setInteractive().on("pointerdown", () => {
+      input.style.display = "block";
+      input.focus();
+      input.value = this.inputId;
+    });
 
-    this.input.keyboard!.on("keydown", (e: KeyboardEvent) => {
-      if (isPlaceholder) {
-        this.idText.setText("");
-        this.idText.setColor("#0f0");
-        isPlaceholder = false;
-      }
+    input.addEventListener("input", () => {
+      this.inputId = input.value;
+      this.idText.setText(this.inputId || "Enter Id...");
+    });
 
-      if (e.key === "Backspace") {
-        this.inputId = this.inputId.slice(0, -1);
-      } else if (e.key.length === 1) {
-        this.inputId += e.key;
-      }
-
-      this.idText.setText(this.inputId);
+    input.addEventListener("blur", () => {
+      input.style.display = "none";
     });
 
     // Submit ボタン
@@ -62,7 +59,7 @@ export class GameOverScene extends Phaser.Scene {
     this.rankingContainer = this.add.container(0, 0);
 
     // Play Again
-    this.add.text(100, 450, "Play Again", {
+    this.add.text(100, 550, "Play Again", {
       fontSize: "24px",
       color: "#0f0"
     })
@@ -76,7 +73,7 @@ export class GameOverScene extends Phaser.Scene {
     this.submitButton.disableInteractive();
     const id = this.inputId || "Anonymous";
 
-    await fetch("https://kfolcvadjl.execute-api.us-east-1.amazonaws.com/dev/scores", {
+    await fetch("https://14ifr6yz83.execute-api.us-east-1.amazonaws.com/dev/scores", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, score: this.score })
@@ -86,7 +83,7 @@ export class GameOverScene extends Phaser.Scene {
   }
 
   async loadRanking() {
-    const res = await fetch("https://kfolcvadjl.execute-api.us-east-1.amazonaws.com/dev/scores");
+    const res = await fetch("https://14ifr6yz83.execute-api.us-east-1.amazonaws.com/dev/scores");
     const scores = await res.json();
 
     // 前回のランキングを消す
@@ -98,8 +95,6 @@ export class GameOverScene extends Phaser.Scene {
     });
 
     scores
-      .sort((a: any, b: any) => b.score - a.score)
-      .slice(0, 10)
       .forEach((s: any, i: number) => {
         const t = this.add.text(
           100,

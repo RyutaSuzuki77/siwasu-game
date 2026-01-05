@@ -13,6 +13,8 @@ export default class GameScene extends Phaser.Scene {
     private day = 1;
     private spawnDelay = 800;
     private sunrise!: Phaser.GameObjects.Image;
+    private isTouching = false;
+    private touchX = 0;
 
     constructor() {
       super("GameScene");
@@ -161,18 +163,34 @@ export default class GameScene extends Phaser.Scene {
     update() {
       this.player.setVelocityX(0);
       // 右移動
-      if (this.cursors.right?.isDown && this.player.body!.blocked.down) {
-        this.player.anims.play("player_run", true);
-        this.player.setFlipX(false);
-        this.player.setVelocityX(500);
+      if (this.cursors.right?.isDown) {
+        this.movePlayer("Right");
         return;
       }
       // 左移動
-      if (this.cursors.left?.isDown && this.player.body!.blocked.down) {
-        this.player.anims.play("player_run", true);
-        this.player.setFlipX(true);
-        this.player.setVelocityX(-500);
+      if (this.cursors.left?.isDown) {
+        this.movePlayer("Left");
         return;
+      }
+
+      // スマホ対応
+      this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+        this.isTouching = true;
+        this.touchX = pointer.x;
+      });
+      this.input.on('pointerup', () => {
+        this.isTouching = false;
+      });
+      if (this.isTouching) {
+        if (this.touchX > this.scale.width / 2) {
+          // 右移動
+          this.movePlayer("Right");
+          return;
+        } else {
+          // 左移動
+          this.movePlayer("Left");
+          return;
+        }
       }
 
       this.player.anims.stop();
@@ -201,6 +219,16 @@ export default class GameScene extends Phaser.Scene {
         callback: () => this.spawnObstacle(),
         loop: false
       });
+    }
 
+    private movePlayer(direction: "Left" | "Right") {
+      this.player.anims.play("player_run", true);
+      if (direction === "Left") {
+        this.player.setFlipX(true);
+        this.player.setVelocityX(-500);
+      } else if (direction === "Right") {
+        this.player.setFlipX(false);
+        this.player.setVelocityX(500);
+      }
     }
 }

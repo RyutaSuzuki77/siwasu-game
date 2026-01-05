@@ -12,20 +12,20 @@
       "AmplifyAppId": "dqe4craq0cjku"
     },
     "categories": {
+      "hosting": {
+        "S3AndCloudFront": {}
+      },
       "function": {
-        "siwasugamec0fc0ae5": {
+        "siwasugame6d07846c": {
           "deploymentBucketName": "amplify-siwasugame-dev-5426a-deployment",
-          "s3Key": "amplify-builds/siwasugamec0fc0ae5-3338787a6d553974706a-build.zip"
+          "s3Key": "amplify-builds/siwasugame6d07846c-73626c65394b59426565-build.zip"
         }
       },
       "storage": {
-        "scores": {}
+        "dynamo3dbc9fa6": {}
       },
       "api": {
-        "api35fc81f7": {}
-      },
-      "hosting": {
-        "S3AndCloudFront": {}
+        "api1a3a8d2e": {}
       }
     }
   }
