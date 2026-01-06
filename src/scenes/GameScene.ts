@@ -158,6 +158,15 @@ export default class GameScene extends Phaser.Scene {
         obstacle.destroy();
         this.scoreText.setText(`Score: ${this.score}`);
       });
+
+      // スマホ対応
+      this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+        this.isTouching = true;
+        this.touchX = pointer.x;
+      });
+      this.input.on('pointerup', () => {
+        this.isTouching = false;
+      });
     }
 
     update() {
@@ -173,14 +182,6 @@ export default class GameScene extends Phaser.Scene {
         return;
       }
 
-      // スマホ対応
-      this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
-        this.isTouching = true;
-        this.touchX = pointer.x;
-      });
-      this.input.on('pointerup', () => {
-        this.isTouching = false;
-      });
       if (this.isTouching) {
         if (this.touchX > this.scale.width / 2) {
           // 右移動
@@ -196,6 +197,17 @@ export default class GameScene extends Phaser.Scene {
       this.player.anims.stop();
       this.player.setTexture("player_front");
       this.player.setFlipX(false);
+
+      // 画面外に出た障害物を削除
+      this.obstacles.children.each((obj) => {
+        const obstacle = obj as Phaser.Physics.Arcade.Sprite;
+
+        if (obstacle.y > 650) {
+          obstacle.destroy();
+        }
+
+        return false;
+      });
     }
 
     private spawnObstacle() {
@@ -209,7 +221,7 @@ export default class GameScene extends Phaser.Scene {
         .setOrigin(0.5, 1)
         .setScale(0.8)
         .setImmovable(true)
-        .setVelocityY(50 * this.day)
+        .setVelocityY(100 + 27 * this.day)
         .setSize(20, 20).setOffset(30, 30);
 
       const nextDelay = Math.max(200, this.spawnDelay - this.day * 20);

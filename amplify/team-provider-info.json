@@ -18,7 +18,7 @@
       "function": {
         "siwasugame6d07846c": {
           "deploymentBucketName": "amplify-siwasugame-dev-5426a-deployment",
-          "s3Key": "amplify-builds/siwasugame6d07846c-73626c65394b59426565-build.zip"
+          "s3Key": "amplify-builds/siwasugame6d07846c-4c543270514e68455945-build.zip"
         }
       },
       "storage": {

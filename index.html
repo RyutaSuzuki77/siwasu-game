@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>Phaser TS Sample</title>
+  <title>師走ゲーム</title>
 </head>
 <body>
   <script type="module" src="/src/main.ts"></script>
@@ -10,16 +10,21 @@
     type="text" 
     maxlength="20"
     style="
-      position: absolute;
-      top: 120px;
-      left: 180px;
+      position: fixed;
+      top: 100px ;
+      left: 100px;
+      width: 1px;
+      height: 1px;
+      transform: translateZ(0);
       font-size: 20px;
-      padding: 4px;
-      background: black;
-      color: #0f0;
+      background: transparent;
       border: none;
       outline: none;
-      display: none;
+      color: transparent;
+      caret-color: transparent;
+      -webkit-text-fill-color: transparent;
+      padding: 0;
+      ime-mode: disabled;
     "
   >
 </body>
@@ -31,6 +36,7 @@
     padding: 0;
     overflow: hidden; /* ← スクロール禁止 */
     height: 100%;
+    touch-action: none;
   }
 
   canvas {

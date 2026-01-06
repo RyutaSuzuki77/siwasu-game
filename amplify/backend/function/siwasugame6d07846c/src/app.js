@@ -54,10 +54,6 @@ app.get("/scores", async function(req, res) {
   }
 });
 
-app.listen(3000, function() {
-  console.log("App started")
-});
-
 // ------------------------------
 // POST /scores → スコア登録
 // ------------------------------
@@ -83,6 +79,10 @@ app.post("/scores", async function(req, res) {
   } catch (err) {
     res.status(500).json({ error: 'Could not save score: ' + err.message });
   }
+});
+
+app.listen(3000, function() {
+  console.log("App started")
 });
 
 // Export the app object. When executing the application local this does nothing. However,

@@ -6,6 +6,7 @@ export class GameOverScene extends Phaser.Scene {
   private inputId: string = "";
   private rankingContainer!: Phaser.GameObjects.Container;
   private submitButton!: Phaser.GameObjects.Text;
+  private submitText!: Phaser.GameObjects.Text;
 
   constructor() {
     super("GameOverScene");
@@ -24,7 +25,7 @@ export class GameOverScene extends Phaser.Scene {
     // Id入力欄（Phaser 内）
     const input = document.getElementById("idInput") as HTMLInputElement;
 
-    this.idText = this.add.text(180, 120, "Enter Id...", {
+    this.idText = this.add.text(100, 120, "Enter Id...", {
       fontSize: "20px",
       color: "#888",
       backgroundColor: "#000",
@@ -44,7 +45,15 @@ export class GameOverScene extends Phaser.Scene {
     });
 
     input.addEventListener("blur", () => {
-      input.style.display = "none";
+      input.style.top = "-1000px";
+      input.style.left = "-1000px";
+    });
+
+    this.input.on("pointerdown", (_pointer: Phaser.Input.Pointer, currentlyOver: Phaser.GameObjects.GameObject[]) => {
+      // idText をタップしたときは blur しない
+      if (currentlyOver.includes(this.idText)) return;
+
+      input.blur();
     });
 
     // Submit ボタン
@@ -71,12 +80,16 @@ export class GameOverScene extends Phaser.Scene {
 
   async submitScore() {
     this.submitButton.disableInteractive();
+    this.submitText = this.add.text(100, 250, `Submitting...`, {
+      fontSize: "28px",
+      color: "#500dfbff"
+    });
     const id = this.inputId || "Anonymous";
 
     await fetch("https://14ifr6yz83.execute-api.us-east-1.amazonaws.com/dev/scores", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, score: this.score })
+      body: JSON.stringify({ id, score: String(this.score).padStart(6, "0") }) // 6桁ゼロ埋め(あまり良くないがString型でカラム定義してソート出来ないから仕方ない)
     });
 
     this.loadRanking();
@@ -85,6 +98,8 @@ export class GameOverScene extends Phaser.Scene {
   async loadRanking() {
     const res = await fetch("https://14ifr6yz83.execute-api.us-east-1.amazonaws.com/dev/scores");
     const scores = await res.json();
+
+    this.submitText.destroy();
 
     // 前回のランキングを消す
     this.rankingContainer.removeAll(true);
@@ -99,7 +114,7 @@ export class GameOverScene extends Phaser.Scene {
         const t = this.add.text(
           100,
           260 + i * 24,
-          `${i + 1}. ${s.id}: ${s.score}`,
+          `${i + 1}. ${s.id}: ${Number(s.score)}`,
           { fontSize: "18px", color: "#fff" }
         );
         this.rankingContainer.add(t);
