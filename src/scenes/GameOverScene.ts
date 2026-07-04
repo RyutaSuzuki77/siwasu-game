@@ -22,6 +22,29 @@ export class GameOverScene extends Phaser.Scene {
       color: "#fff"
     });
 
+    // ベストスコア（localStorage）
+    const best = Number(localStorage.getItem("siwasu_best") ?? "0");
+    if (this.score > best) {
+      localStorage.setItem("siwasu_best", String(this.score));
+      const record = this.add.text(450, 64, "NEW RECORD!", {
+        fontSize: "26px",
+        color: "#ffd700",
+        fontStyle: "bold"
+      }).setOrigin(0, 0.5);
+      this.tweens.add({
+        targets: record,
+        scale: { from: 1, to: 1.15 },
+        yoyo: true,
+        repeat: -1,
+        duration: 400
+      });
+    } else if (best > 0) {
+      this.add.text(450, 55, `Best: ${best}`, {
+        fontSize: "22px",
+        color: "#aaa"
+      });
+    }
+
     // Id入力欄（Phaser 内）
     const input = document.getElementById("idInput") as HTMLInputElement;
 
@@ -80,6 +103,7 @@ export class GameOverScene extends Phaser.Scene {
 
   async submitScore() {
     this.submitButton.disableInteractive();
+    this.submitButton.setText("[ Submitted ]").setColor("#888");
     this.submitText = this.add.text(100, 250, `Submitting...`, {
       fontSize: "28px",
       color: "#500dfbff"
@@ -104,10 +128,11 @@ export class GameOverScene extends Phaser.Scene {
     // 前回のランキングを消す
     this.rankingContainer.removeAll(true);
 
-    this.add.text(100, 220, "--- Ranking ---", {
+    const heading = this.add.text(100, 220, "--- Ranking ---", {
       fontSize: "22px",
       color: "#fff"
     });
+    this.rankingContainer.add(heading);
 
     scores
       .forEach((s: any, i: number) => {
